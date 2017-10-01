@@ -8,7 +8,7 @@ from ebooklib.plugins.base import BasePlugin
 from lxml import etree
 from lxml.html import HtmlElement
 
-ROOT_DIR = r'C:\Users\Kwert\PycharmProjects\asciidoctor2epub\progit2-ru-master'
+ROOT_DIR = r'C:\Users\Kwert\PycharmProjects\asciidoctor2epub'
 FILE_TO_PARSE = 'progit.html'
 RES_NAME = 'Pro Git'
 HREF = {}
@@ -57,7 +57,7 @@ def parse_root():
     book.set_language('ru')
     book.spine = ['cover', 'nav']
 
-    book.set_cover('images/cover.png', open(os.path.join(*(ROOT_DIR, 'book', 'cover.png')), 'rb').read())
+    book.set_cover('images/cover.png', open(os.path.join(*(ROOT_DIR, 'progit2-ru', 'book', 'cover.png')), 'rb').read())
 
     o_page = html.parse(os.path.join(ROOT_DIR, FILE_TO_PARSE))  # type: HtmlElement
     o_toc = o_page.xpath('//*[@id="toc"]')[0]  # type: HtmlElement
@@ -121,7 +121,7 @@ def add_toc(toc, o_section, index):
     section_id = o_section_href.get('href')[1:]
 
     section_name = str(index).zfill(2)
-    toc.append(epub.Link('section_%s.xhtml' % section_name, o_section_href.text_content(),
+    toc.append(epub.Link('section_%s.xhtml#%s' % (section_name, section_id), o_section_href.text_content(),
                          section_id if not section_id.startswith('_') else section_id[1:]))
 
     if o_section.xpath('ul/li'):
